@@ -80,7 +80,7 @@ class PD(QMainWindow):
         self.dateLabel = QLabel("", self)
         self.dateLabel.setGeometry(500, 70, 480, 100)
         self.dateLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont(FONT_STYLE, 24) 
+        labelFont = QFont(FONT_STYLE, 20) 
         self.dateLabel.setFont(labelFont)
  
         # Temperature label
@@ -91,9 +91,9 @@ class PD(QMainWindow):
         self.tempIcon.setPixmap(pixmap)
         self.tempIcon.setGeometry(40, 170, 125, 125)
         self.tempLabel = QLabel("-°C", self)
-        self.tempLabel.setGeometry(160, 190, 480, 150)
+        self.tempLabel.setGeometry(170, 190, 480, 150)
         self.tempLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont(FONT_STYLE, 50, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 45, QFont.Bold) 
         self.tempLabel.setStyleSheet("color: red")
         self.tempLabel.setFont(labelFont)
         
@@ -105,9 +105,9 @@ class PD(QMainWindow):
         self.humIcon.setPixmap(pixmap2)
         self.humIcon.setGeometry(40, 310, 125, 125)
         self.humLabel = QLabel("-%", self)
-        self.humLabel.setGeometry(160, 330, 480, 150)
+        self.humLabel.setGeometry(170, 330, 480, 150)
         self.humLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont(FONT_STYLE, 50, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 45, QFont.Bold) 
         self.humLabel.setStyleSheet("color: #2194f3")
         self.humLabel.setFont(labelFont)
         
@@ -133,7 +133,7 @@ class PD(QMainWindow):
         self.quitBtn.setStyleSheet("background-color: black")
         self.quitBtn.setGeometry(740, 10, 50, 50)
         labelFont = QFont(FONT_STYLE, 20, QFont.Bold) 
-        self.quitBtn.setStyleSheet("color: white")
+        self.quitBtn.setStyleSheet("color: black")
         self.quitBtn.setFont(labelFont)
         
         
