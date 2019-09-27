@@ -72,13 +72,13 @@ class PD(QMainWindow):
         
         # Date and time label
         self.timeLabel = QLabel("", self)               # creates label
-        self.timeLabel.setGeometry(40, 20, 480, 150)    # sets label location and size
+        self.timeLabel.setGeometry(40, 40, 480, 150)    # sets label location and size
         self.timeLabel.setAlignment(Qt.AlignLeft)       # aligns text
-        labelFont = QFont(FONT_STYLE, 80, QFont.Bold)       
+        labelFont = QFont(FONT_STYLE, 60, QFont.Bold)       
         self.timeLabel.setFont(labelFont)               # sets label font
         
         self.dateLabel = QLabel("", self)
-        self.dateLabel.setGeometry(480, 70, 480, 100)
+        self.dateLabel.setGeometry(500, 70, 480, 100)
         self.dateLabel.setAlignment(Qt.AlignLeft)
         labelFont = QFont(FONT_STYLE, 24) 
         self.dateLabel.setFont(labelFont)
@@ -91,9 +91,9 @@ class PD(QMainWindow):
         self.tempIcon.setPixmap(pixmap)
         self.tempIcon.setGeometry(40, 170, 125, 125)
         self.tempLabel = QLabel("-°C", self)
-        self.tempLabel.setGeometry(180, 175, 480, 150)
+        self.tempLabel.setGeometry(160, 190, 480, 150)
         self.tempLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont(FONT_STYLE, 60, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 50, QFont.Bold) 
         self.tempLabel.setStyleSheet("color: red")
         self.tempLabel.setFont(labelFont)
         
@@ -105,9 +105,9 @@ class PD(QMainWindow):
         self.humIcon.setPixmap(pixmap2)
         self.humIcon.setGeometry(40, 310, 125, 125)
         self.humLabel = QLabel("-%", self)
-        self.humLabel.setGeometry(180, 315, 480, 150)
+        self.humLabel.setGeometry(160, 330, 480, 150)
         self.humLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont(FONT_STYLE, 60, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 50, QFont.Bold) 
         self.humLabel.setStyleSheet("color: #2194f3")
         self.humLabel.setFont(labelFont)
         
@@ -117,11 +117,11 @@ class PD(QMainWindow):
         pixmap3 = pixmap3.scaledToWidth(125)
         pixmap3 = pixmap3.scaledToHeight(125)
         self.heatIcon.setPixmap(pixmap3)
-        self.heatIcon.setGeometry(405, 240, 125, 125)
+        self.heatIcon.setGeometry(425, 240, 125, 125)
         self.heatLabel = QLabel("-", self)
-        self.heatLabel.setGeometry(545, 245, 480, 150)
+        self.heatLabel.setGeometry(565, 260, 480, 150)
         self.heatLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont(FONT_STYLE, 60, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 45, QFont.Bold) 
         self.heatLabel.setStyleSheet("color: #00b04f")
         self.heatLabel.setFont(labelFont)
         
