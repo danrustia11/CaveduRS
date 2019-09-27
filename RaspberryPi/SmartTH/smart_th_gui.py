@@ -62,7 +62,7 @@ class PD(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        # self.showFullScreen()
+        self.showFullScreen()
 
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
