@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+##########################################
+# Raspberry Pi BME280 TH Home Sensor GUI #
+# - 7 inch touchsreen display            #
+# Written by: DJAR                       #
+##########################################
+
 import sys
 import traceback 
 
@@ -16,10 +22,23 @@ import time
 import os
 from os.path import basename
 
+# sensor library
+import bme280
+import smbus2
 
-# I2C bus=1, Address=0x40
-sht = SHT20(1, 0x40)
 
+# I2C bus=1
+# Address=0x76 (SD0 = 3.3V)
+# Address=0x77 (SD0 = GND)
+
+port = 1
+address = 0x76 
+bus = smbus2.SMBus(port)
+bme280.load_calibration_params(bus,address)
+
+# Options
+REFRESH_DELAY = 1000 # in milliseconds
+FONT_STYLE = "Calibri"
 
 from time import gmtime, strftime, localtime
 
@@ -43,79 +62,82 @@ class PD(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.showFullScreen()
+        # self.showFullScreen()
 
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
-        self.setFixedSize(480, 800)
+        self.setFixedSize(800, 480)
    
         self.setStyleSheet("background-color:black;  color: white;")
         
- 
-        self.timeLabel = QLabel("", self)
-        self.timeLabel.setGeometry(40, 80, 480, 150)
-        self.timeLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont("Calibri", 60, QFont.Bold) 
-        self.timeLabel.setFont(labelFont)
+        # Date and time label
+        self.timeLabel = QLabel("", self)               # creates label
+        self.timeLabel.setGeometry(40, 20, 480, 150)    # sets label location and size
+        self.timeLabel.setAlignment(Qt.AlignLeft)       # aligns text
+        labelFont = QFont(FONT_STYLE, 80, QFont.Bold)       
+        self.timeLabel.setFont(labelFont)               # sets label font
         
         self.dateLabel = QLabel("", self)
-        self.dateLabel.setGeometry(40, 180, 480, 100)
+        self.dateLabel.setGeometry(480, 70, 480, 100)
         self.dateLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont("Calibri", 24) 
+        labelFont = QFont(FONT_STYLE, 24) 
         self.dateLabel.setFont(labelFont)
  
+        # Temperature label
         self.tempIcon = QLabel(self)
-        pixmap = QPixmap('T_icon.png')
+        pixmap = QPixmap('T_icon.png')                  # sets icon image source
         pixmap = pixmap.scaledToWidth(125)
         pixmap = pixmap.scaledToHeight(125)
         self.tempIcon.setPixmap(pixmap)
-        self.tempIcon.setGeometry(40, 270, 125, 125)
-        self.tempLabel = QLabel("25.6°C", self)
-        self.tempLabel.setGeometry(180, 290, 480, 150)
+        self.tempIcon.setGeometry(40, 170, 125, 125)
+        self.tempLabel = QLabel("-°C", self)
+        self.tempLabel.setGeometry(180, 175, 480, 150)
         self.tempLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont("Calibri", 50, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 60, QFont.Bold) 
         self.tempLabel.setStyleSheet("color: red")
         self.tempLabel.setFont(labelFont)
         
-        
+        # Humidity label
         self.humIcon = QLabel(self)
         pixmap2 = QPixmap('H_icon.png')
         pixmap2 = pixmap2.scaledToWidth(125)
         pixmap2 = pixmap2.scaledToHeight(125)
         self.humIcon.setPixmap(pixmap2)
-        self.humIcon.setGeometry(40, 405, 125, 125)
-        self.humLabel = QLabel("78.6%", self)
-        self.humLabel.setGeometry(180, 425, 480, 150)
+        self.humIcon.setGeometry(40, 310, 125, 125)
+        self.humLabel = QLabel("-%", self)
+        self.humLabel.setGeometry(180, 315, 480, 150)
         self.humLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont("Calibri", 50, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 60, QFont.Bold) 
         self.humLabel.setStyleSheet("color: #2194f3")
         self.humLabel.setFont(labelFont)
         
-        
+        # Heat index label
         self.heatIcon = QLabel(self)
         pixmap3 = QPixmap('HI_icon.png')
         pixmap3 = pixmap3.scaledToWidth(125)
         pixmap3 = pixmap3.scaledToHeight(125)
         self.heatIcon.setPixmap(pixmap3)
-        self.heatIcon.setGeometry(40, 535, 125, 125)
-        self.heatLabel = QLabel("78.6", self)
-        self.heatLabel.setGeometry(180, 555, 480, 150)
+        self.heatIcon.setGeometry(405, 240, 125, 125)
+        self.heatLabel = QLabel("-", self)
+        self.heatLabel.setGeometry(545, 245, 480, 150)
         self.heatLabel.setAlignment(Qt.AlignLeft)
-        labelFont = QFont("Calibri", 50, QFont.Bold) 
+        labelFont = QFont(FONT_STYLE, 60, QFont.Bold) 
         self.heatLabel.setStyleSheet("color: #00b04f")
         self.heatLabel.setFont(labelFont)
         
         
-        
-        
-        
-        
-        self.quitBtn = QPushButton('Quit', self)
+        # Quit button
+        self.quitBtn = QPushButton('X', self)
         self.quitBtn.clicked.connect(self.quitProgram)
         self.quitBtn.resize(self.quitBtn.sizeHint())
-        self.quitBtn.setStyleSheet("background-color: gray")
-        self.quitBtn.setGeometry(360, 700, 50, 50)
+        self.quitBtn.setStyleSheet("background-color: black")
+        self.quitBtn.setGeometry(740, 10, 50, 50)
+        labelFont = QFont(FONT_STYLE, 20, QFont.Bold) 
+        self.quitBtn.setStyleSheet("color: white")
+        self.quitBtn.setFont(labelFont)
         
+        
+        # Shows all created icons
         self.timeLabel.show()
         self.dateLabel.show()
         self.tempIcon.show()
@@ -126,13 +148,14 @@ class PD(QMainWindow):
         self.heatLabel.show()
         self.quitBtn.show()
         
+        # Sets refresh timer
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.changeTime)
-        self.timer.start(1000)
+        self.timer.start(REFRESH_DELAY)
         
         
     def changeTime(self):
-        self.timer.setInterval(1000)
+        self.timer.setInterval(REFRESH_DELAY)
         
         
         # Get time
@@ -147,15 +170,22 @@ class PD(QMainWindow):
 
         # Get date
         date_now = strftime("%b. %d, %Y %A", localtime())
-
-
         
+        # Set time
+        self.timeLabel.setText(time_now)
+        
+        # Set date
+        self.dateLabel.setText(date_now)
+
+
         try:
+            bme280_data = bme280.sample(bus,address)
+            
             # Get T and H
-            TC = sht.temperature().C
-            H = sht.humidity().RH
-            #TC = 25.0
-            #H = 85.0
+            TC = bme280_data.temperature
+            H = bme280_data.humidity
+
+
             
             # Tc to Tf
             T = (TC * 9.0/5.0) + 32.0
@@ -174,18 +204,6 @@ class PD(QMainWindow):
             
             # Get HIc
             HIC = (HIF - 32.0) * 5.0/9.0 
-            
-
-            
-
-
-
-
-            # Set time
-            self.timeLabel.setText(time_now)
-            
-            # Set date
-            self.dateLabel.setText(date_now)
             
             
             # Set T
