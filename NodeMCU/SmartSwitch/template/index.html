@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>Smart Switch</title>
+    <!-- Necessary script and library files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://api.zerynth.com/zadm/latest/z.js"></script> 
+    <link rel="stylesheet" href="style.css">
+  </head>
+  
+  
+  
+  <body>
+    <div style="text-align:center">
+      <p id="status" style="background:#ddd;font-weight:bold"></p>
+      <h2>Smart Switch</h2>
+      <br>
+        <!-- On/off button -->
+        <div style="display: inline-block; margin: auto">
+            <div style="float: left; height: 34px; line-height: 34px">
+                Switch <span id="onoff">on</span>:
+            </div>
+            <div style="width: 100px; margin-left: 125px">
+                <label class="switch">
+                    <input type="checkbox" id="onoffbtn">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+      </div>
+      <div class="footer">
+          CaveDU
+      </div>
+    <script>
+      //callback for remote random method
+        function on_callback(msg){
+            // do somethings
+        }
+        function off_callback(msg){
+            // do something
+        }
+        
+        function check_callback(msg){
+            // do something
+        }
+        
+        $("#onoffbtn").change(function() {
+            if(this.checked) {
+                Z.call('on_switch',[]);
+                $("#onoff").html("on")
+            } else {
+                Z.call('off_switch',[]);
+                $("#onoff").html("off")
+            }
+        });
+        $(document).ready(function() {
+          // initialize the Z object
+          Z.init({
+            on_connected:  function(){$("#status").html("CONNECTED")},
+            on_error:  function(){$("#status").html("ERROR")},
+            on_disconnected:  function(){$("#status").html("DISCONNECTED"); return true},
+            on_online:  function(evt){$("#status").html("ONLINE");},
+            on_offline:  function(evt){$("#status").html("OFFLINE");},
+            on_event:  function(evt){
+                //display received event
+                $("#status").html("EVENT!"+JSON.stringify(evt)); 
+            }
+          })
+        });
+    </script>
+  </body>
+</html>
